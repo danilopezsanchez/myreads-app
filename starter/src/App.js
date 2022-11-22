@@ -1,6 +1,8 @@
 import "./App.css";
 import { useState } from "react";
-import ListBook from "./components/ListBook";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Searcher from "./components/Searcher";
+import ListBookContainer from "./components/ListBookContainer";
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
@@ -50,13 +52,15 @@ function App() {
     },
   ]);
 
-  const bookStatusReading = "reading";
-  const bookStatusToRead = "toRead";
-  const bookStatusRead = "read";
+  const bookStatus = {
+    "reading":"reading",
+    "toRead":"toRead",
+    "read":"read"
+  }
 
   const handleCategoryChange = (book, value) => {
     //If the status of the book is none, delete ir from the array
-    if(value!=bookStatusReading && value!=bookStatusToRead && value!=bookStatusRead){
+    if(value!=bookStatus["reading"] && value!=bookStatus["toRead"] && value!=bookStatus["read"]){
       const newArray = booksArray.filter((b)=>{return b.title!=book.title });
       setBooksArray(newArray);
     }
@@ -73,65 +77,22 @@ function App() {
 
   return (
     <div className="app">
-      {showSearchPage ? (
-    	<div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-              />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
-        </div>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <div>
-              <div className="bookshelf">
-                <h2 className="bookshelf-title">Currently Reading</h2>
-                <ListBook
-                  booksArray={booksArray}
-                  bookStatus={bookStatusReading}
-                  handleCategoryChange={handleCategoryChange}
-                />
-              </div>
-              <div className="bookshelf">
-                <h2 className="bookshelf-title">Want to read</h2>
-                <ListBook
-                booksArray={booksArray}
-                bookStatus={bookStatusToRead}
-                handleCategoryChange={handleCategoryChange}
-                />
-              </div>
-              <div className="bookshelf">
-                <h2 className="bookshelf-title">Read</h2>
-                <ListBook
-                booksArray={booksArray}
-                bookStatus={bookStatusRead}
-                handleCategoryChange={handleCategoryChange}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
-        </div>
-      )}
+      <Routes>
+        <Route path="/" element={
+          <ListBookContainer
+          booksArray={booksArray}
+          handleCategoryChange={handleCategoryChange}
+          bookStatus={bookStatus}
+            />
+        } 
+        />
+        <Route path="/search" element={
+          <Searcher />
+        } 
+          />
+      </Routes>
     </div>
+    
   );
 }
 
