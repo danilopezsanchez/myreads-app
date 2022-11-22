@@ -1,6 +1,11 @@
-const Book = ({ book }) => {
-	const { title, author, img } = book;
+const Book = ({ book, handleCategoryChange }) => {
+	const { title, author, img, status } = book;
 	const backgroundImg = `url(${img})`;
+
+	const handleChange  = (event) => {
+		handleCategoryChange(book, event.target.value);
+	}
+
 	return(
 		<li>
 			<div className="book">
@@ -14,14 +19,14 @@ const Book = ({ book }) => {
 					}}
 					></div>
 					<div className="book-shelf-changer">
-					<select>
+					<select onChange={handleChange} value={status}>
 						<option value="none" disabled>
 						Move to...
 						</option>
-						<option selected="selected" value="currentlyReading">
+						<option value="reading">
 						Currently Reading
 						</option>
-						<option value="wantToRead">Want to Read</option>
+						<option value="toRead">Want to Read</option>
 						<option value="read">Read</option>
 						<option value="none">None</option>
 					</select>

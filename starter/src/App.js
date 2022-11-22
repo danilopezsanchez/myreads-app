@@ -5,7 +5,7 @@ import ListBook from "./components/ListBook";
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
 
-  const booksArray = [
+  const [booksArray, setBooksArray] = useState([
     {
       status: "reading",
       title: "To Kill a Mockingbird",
@@ -48,11 +48,28 @@ function App() {
       author: "Mark Twain",
       img: "http://books.google.com/books/content?id=32haAAAAMAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72yckZ5f5bDFVIf7BGPbjA0KYYtlQ__nWB-hI_YZmZ-fScYwFy4O_fWOcPwf-pgv3pPQNJP_sT5J_xOUciD8WaKmevh1rUR-1jk7g1aCD_KeJaOpjVu0cm_11BBIUXdxbFkVMdi&source=gbs_api",
     },
-  ];
+  ]);
 
   const bookStatusReading = "reading";
   const bookStatusToRead = "toRead";
   const bookStatusRead = "read";
+
+  const handleCategoryChange = (book, value) => {
+    //If the status of the book is none, delete ir from the array
+    if(value!=bookStatusReading && value!=bookStatusToRead && value!=bookStatusRead){
+      const newArray = booksArray.filter((b)=>{return b.title!=book.title });
+      setBooksArray(newArray);
+    }
+    else{
+      const newArray = booksArray.map((b)=>{
+        if(b.title==book.title){
+          b.status=value;
+        }
+        return b;
+      })
+      setBooksArray(newArray);
+    }
+  }
 
   return (
     <div className="app">
@@ -88,15 +105,24 @@ function App() {
                 <ListBook
                   booksArray={booksArray}
                   bookStatus={bookStatusReading}
+                  handleCategoryChange={handleCategoryChange}
                 />
               </div>
               <div className="bookshelf">
                 <h2 className="bookshelf-title">Want to read</h2>
-                <ListBook booksArray={booksArray} bookStatus={bookStatusToRead} />
+                <ListBook
+                booksArray={booksArray}
+                bookStatus={bookStatusToRead}
+                handleCategoryChange={handleCategoryChange}
+                />
               </div>
               <div className="bookshelf">
                 <h2 className="bookshelf-title">Read</h2>
-                <ListBook booksArray={booksArray} bookStatus={bookStatusRead} />
+                <ListBook
+                booksArray={booksArray}
+                bookStatus={bookStatusRead}
+                handleCategoryChange={handleCategoryChange}
+                />
               </div>
             </div>
           </div>
