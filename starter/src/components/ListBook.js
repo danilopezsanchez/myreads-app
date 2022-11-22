@@ -2,7 +2,7 @@ import Book from "./Book";
 
 const ListBook = ({ booksArray, bookStatus, handleCategoryChange }) => {
 	const booksArrayFileter = booksArray.filter((b)=>{
-		return b.status == bookStatus;
+		return b.shelf == bookStatus;
 	});
 	return(
 		<div className="bookshelf-books">

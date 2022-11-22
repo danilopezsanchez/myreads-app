@@ -1,6 +1,6 @@
 const Book = ({ book, handleCategoryChange }) => {
-	const { title, author, img, status } = book;
-	const backgroundImg = `url(${img})`;
+	const { title, authors, imageLinks, shelf } = book;
+	const backgroundImg = `url(${imageLinks.smallThumbnail})`;
 
 	const handleChange  = (event) => {
 		handleCategoryChange(book, event.target.value);
@@ -19,21 +19,32 @@ const Book = ({ book, handleCategoryChange }) => {
 					}}
 					></div>
 					<div className="book-shelf-changer">
-					<select onChange={handleChange} value={status}>
+					<select onChange={handleChange} value={shelf}>
 						<option value="none" disabled>
 						Move to...
 						</option>
-						<option value="reading">
+						<option value="currentlyReading">
 						Currently Reading
 						</option>
-						<option value="toRead">Want to Read</option>
+						<option value="wantToRead">Want to Read</option>
 						<option value="read">Read</option>
 						<option value="none">None</option>
 					</select>
 					</div>
 				</div>
 				<div className="book-title">{title}</div>
-				<div className="book-authors">{author}</div>
+				<div className="book-authors">
+					{
+					authors.map((a,index)=>{
+						if(index==authors.length-1){
+							return a
+						}
+						else{
+							return a+", "
+						}
+					}
+					)}
+					</div>
 			</div>
 		</li>
 	)

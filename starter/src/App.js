@@ -1,14 +1,15 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Searcher from "./components/Searcher";
 import ListBookContainer from "./components/ListBookContainer";
+import * as BooksAPI from "./BooksAPI";
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
 
   const [booksArray, setBooksArray] = useState([
-    {
+    /*{
       status: "reading",
       title: "To Kill a Mockingbird",
       author: "Harper Lee",
@@ -49,12 +50,12 @@ function App() {
       title: "The Adventures of Tom Sawyer",
       author: "Mark Twain",
       img: "http://books.google.com/books/content?id=32haAAAAMAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72yckZ5f5bDFVIf7BGPbjA0KYYtlQ__nWB-hI_YZmZ-fScYwFy4O_fWOcPwf-pgv3pPQNJP_sT5J_xOUciD8WaKmevh1rUR-1jk7g1aCD_KeJaOpjVu0cm_11BBIUXdxbFkVMdi&source=gbs_api",
-    },
+    },*/
   ]);
 
   const bookStatus = {
-    "reading":"reading",
-    "toRead":"toRead",
+    "reading":"currentlyReading",
+    "toRead":"wantToRead",
     "read":"read"
   }
 
@@ -67,13 +68,24 @@ function App() {
     else{
       const newArray = booksArray.map((b)=>{
         if(b.title==book.title){
-          b.status=value;
+          b.shelf=value;
         }
         return b;
       })
       setBooksArray(newArray);
     }
   }
+
+  useEffect(()=>{
+    console.log("effect")
+    const getBookshelves = async () =>{
+      console.log("call")
+      const res = await BooksAPI.getAll();
+      console.log(res)
+      setBooksArray(res);
+    }
+    getBookshelves();
+  },[])
 
   return (
     <div className="app">
