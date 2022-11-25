@@ -20,7 +20,7 @@ const Book = ({ book, handleCategoryChange }) => {
 						width: 128,
 						height: 193,
 						backgroundImage: backgroundImg,
-						"background-size": "cover"
+						backgroundSize: "cover"
 						
 					}}
 					></div>

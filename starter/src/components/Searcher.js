@@ -1,60 +1,73 @@
-import { useState } from "react";
-import {Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ListBook from "./ListBook";
 import * as BooksAPI from "../BooksAPI";
 
-const Searcher = ({handleCategoryChange, booksArray }) => {
+const Searcher = ({ handleCategoryChange, booksArray }) => {
+	const [query, setQuery] = useState("");
+	const [arraySearch, setArraySearch] = useState([]);
 
-  const [query, setQuery] = useState("");
-  const [arraySearch, setArraySearch] = useState([]);
+	const handleInputChange = (event) => {
+		setQuery(event.target.value);
+	};
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+	const handleSearch = () => {
 
-    const getBooksFromQuery = async () =>{
-      const res = await BooksAPI.search(query.trim());
-      let result = [];
-      result = res.map(el => {
-        booksArray.map(element => {
-            if(element.id === el.id){
-                el["shelf"]=element.shelf;
-            }
-			return element;
-        });
-        return el;
-      });
+		const getBooksFromQuery = async () => {
+			const res = await BooksAPI.search(query)
+			.catch(error=>{
+				setArraySearch([])
+			});
+			if (res && res.length > 0 && !res.error) {
+				let result = [];
+				result = res.map((el) => {
+					booksArray.map((element) => {
+						if (element.id === el.id) {
+							el["shelf"] = element.shelf;
+						}
+						return element;
+					});
+					return el;
+				});
+				setArraySearch(result);
+			}
+			else{
+				setArraySearch([]);
+			}
+		};
+		getBooksFromQuery();
+	};
 
-      setArraySearch(result);
-    }
-    getBooksFromQuery();
-  } 
+	useEffect(handleSearch,[query])
 
-	return(
+	return (
 		<div className="search-books">
-          <div className="search-books-bar">
-            <Link className="close-search" to="/">Close</Link>
-            <div className="search-books-input-wrapper">
-              <form onSubmit={handleSearch}>
-                <input
-                  type="text"
-                  placeholder="Search by title, author, or ISBN"
-                  value={query}
-                  onChange={(event)=>{setQuery(event.target.value)}}
-                />
-              </form>
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid">
-            {<ListBook
-              booksArray={booksArray}
-              handleCategoryChange={handleCategoryChange}
-              booksInSearch={arraySearch}
-            />}
-            </ol>
-          </div>
-        </div>
-	)
-}
+			<div className="search-books-bar">
+				<Link className="close-search" to="/">
+					Close
+				</Link>
+				<div className="search-books-input-wrapper">
+					<input
+						type="text"
+						placeholder="Search by title, author, or ISBN"
+						value={query}
+						onChange={handleInputChange}
+					/>
+				</div>
+			</div>
+			<div className="search-books-results">
+				<ol className="books-grid">
+					{
+						<ListBook
+							booksArray={booksArray}
+							handleCategoryChange={handleCategoryChange}
+							booksInSearch={arraySearch}
+						/>
+					}
+				</ol>
+			</div>
+		</div>
+	);
+};
 
 export default Searcher;
