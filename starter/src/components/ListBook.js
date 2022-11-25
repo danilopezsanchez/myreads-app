@@ -1,21 +1,25 @@
 import Book from "./Book";
 
-const ListBook = ({ booksArray, bookStatus, handleCategoryChange }) => {
-	const booksArrayFileter = booksArray.filter((b)=>{
-		return b.shelf == bookStatus;
-	});
+const ListBook = ({ booksArray, bookStatus, handleCategoryChange, booksInSearch }) => {
+	//Filtering books by shelf
+	let booksArrayFiltered=[];
+	if(bookStatus){
+		booksArrayFiltered = booksArray.filter((b)=>{
+			return b.shelf == bookStatus;
+		});
+	}else{
+		booksArrayFiltered=booksInSearch;
+	}
 	return(
-		<div className="bookshelf-books">
 			<ol className="books-grid">
 				{
-					booksArrayFileter.length>0 ? booksArrayFileter.map((book, index)=> {
+					booksArrayFiltered.length>0 ? booksArrayFiltered.map((book, index)=> {
 						return <Book key={index} book={book} handleCategoryChange={handleCategoryChange} />
 					})
 					:
-					<div>There's no books in this category</div>
+					<div>There are no books here :(</div>
 				}
 			</ol>
-		</div>
 	)
 }
 
