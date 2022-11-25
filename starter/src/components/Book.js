@@ -1,6 +1,9 @@
+import imgCover from '../images/cover.png';
+
 const Book = ({ book, handleCategoryChange }) => {
 	const { title, authors, imageLinks, shelf } = book;
-	const backgroundImg = `url(${imageLinks.smallThumbnail})`;
+	const imageForBackground = imageLinks && imageLinks.smallThumbnail ? imageLinks.smallThumbnail : imgCover
+	const backgroundImg = `url(${imageForBackground})`;
 	const valueShelf = shelf? shelf: "none";
 
 	const handleChange  = (event) => {
@@ -17,6 +20,8 @@ const Book = ({ book, handleCategoryChange }) => {
 						width: 128,
 						height: 193,
 						backgroundImage: backgroundImg,
+						"background-size": "cover"
+						
 					}}
 					></div>
 					<div className="book-shelf-changer">
