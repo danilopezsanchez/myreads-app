@@ -19,6 +19,7 @@ const Searcher = ({handleCategoryChange, booksArray }) => {
             if(element.id === el.id){
                 el["shelf"]=element.shelf;
             }
+			return element;
         });
         return el;
       });

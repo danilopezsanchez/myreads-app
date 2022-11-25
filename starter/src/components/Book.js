@@ -37,7 +37,7 @@ const Book = ({ book, handleCategoryChange }) => {
 				<div className="book-authors">
 					{
 						authors ? authors.map((a,index)=>{
-							if(index==authors.length-1){
+							if(index === authors.length-1){
 								return a
 							}
 							else{

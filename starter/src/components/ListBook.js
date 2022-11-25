@@ -5,7 +5,7 @@ const ListBook = ({ booksArray, bookStatus, handleCategoryChange, booksInSearch 
 	let booksArrayFiltered=[];
 	if(bookStatus){
 		booksArrayFiltered = booksArray.filter((b)=>{
-			return b.shelf == bookStatus;
+			return b.shelf === bookStatus;
 		});
 	}else{
 		booksArrayFiltered=booksInSearch;
