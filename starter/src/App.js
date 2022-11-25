@@ -15,7 +15,7 @@ function App() {
 	};
 
 	const updateBookStatus = async (book, value) => {
-		const res = await BooksAPI.update(book, value);
+		await BooksAPI.update(book, value);
 	}
 
 	const handleCategoryChange = (book, value) => {

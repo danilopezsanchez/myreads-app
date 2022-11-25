@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ListBook from "./ListBook";
 import * as BooksAPI from "../BooksAPI";
+import debounce from 'lodash.debounce';
 
 const Searcher = ({ handleCategoryChange, booksArray }) => {
 	const [query, setQuery] = useState("");
@@ -11,31 +12,44 @@ const Searcher = ({ handleCategoryChange, booksArray }) => {
 		setQuery(event.target.value);
 	};
 
-	const handleSearch = () => {
-
-		const getBooksFromQuery = async () => {
-			const res = await BooksAPI.search(query)
-			.catch(error=>{
-				setArraySearch([])
-			});
-			if (res && res.length > 0 && !res.error) {
-				let result = [];
-				result = res.map((el) => {
-					booksArray.map((element) => {
-						if (element.id === el.id) {
-							el["shelf"] = element.shelf;
-						}
-						return element;
-					});
-					return el;
+	const getBooksFromQuery = async () => {
+		if(query===""){
+			setArraySearch([]);
+			return;
+		}
+		const res = await BooksAPI.search(query)
+		.catch(error=>{
+			setArraySearch([])
+		});
+		if (res && res.length > 0 && !res.error) {
+			let result = [];
+			result = res.map((el) => {
+				booksArray.map((element) => {
+					if (element.id === el.id) {
+						el["shelf"] = element.shelf;
+					}
+					return element;
 				});
-				setArraySearch(result);
-			}
-			else{
-				setArraySearch([]);
-			}
-		};
-		getBooksFromQuery();
+				return el;
+			});
+			setArraySearch(result);
+		}
+		else{
+			setArraySearch([]);
+		}
+	};
+
+	const debouncedResults = debounce(()=>{
+		getBooksFromQuery()
+	}, 200);
+
+	const handleSearch = () => {
+		debouncedResults();
+
+		return () => {
+			debouncedResults.cancel();
+		  };
+
 	};
 
 	useEffect(handleSearch,[query])
