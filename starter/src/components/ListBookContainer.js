@@ -6,8 +6,6 @@ const ListBookContainer = ({booksArray, handleCategoryChange, bookStatus}) => {
 	const bookStatusToRead = bookStatus["toRead"];
 	const bookStatusRead = bookStatus["read"];
 
-	console.log(booksArray);
-
 	return(
 		<div className="list-books">
           <div className="list-books-title">

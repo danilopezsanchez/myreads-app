@@ -32,7 +32,6 @@ function App() {
       setBooksArray(newArray);
     }//If is clicked in search page
     else{
-      console.log("search")
       book["shelf"] = value;
       setBooksArray(booksArray.concat(book));
     }
